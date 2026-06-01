@@ -1,12 +1,12 @@
 'use client'
 
 import { useState } from 'react'
-import { signIn } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 
-export default function LoginPage() {
+export default function RegisterPage() {
   const router = useRouter()
+  const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
@@ -15,20 +15,27 @@ export default function LoginPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError('')
+
+    if (password.length < 6) {
+      setError('Password কমপক্ষে ৬ character হতে হবে।')
+      return
+    }
+
     setLoading(true)
 
-    const res = await signIn('credentials', {
-      email,
-      password,
-      redirect: false,
+    const res = await fetch('/api/register', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, email, password }),
     })
 
+    const data = await res.json()
     setLoading(false)
 
-    if (res?.error) {
-      setError('Email বা Password ভুল হয়েছে।')
+    if (!res.ok) {
+      setError(data.error || 'কিছু একটা সমস্যা হয়েছে।')
     } else {
-      router.push('/dashboard')
+      router.push('/login?registered=true')
     }
   }
 
@@ -48,10 +55,24 @@ export default function LoginPage() {
 
         {/* Card */}
         <div className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm p-8">
-          <h1 className="text-2xl font-bold text-white mb-1">স্বাগতম!</h1>
-          <p className="text-sm text-white/40 mb-8">Account এ login করো</p>
+          <h1 className="text-2xl font-bold text-white mb-1">Account বানাও</h1>
+          <p className="text-sm text-white/40 mb-8">সম্পূর্ণ free, কোনো credit card লাগবে না</p>
 
           <form onSubmit={handleSubmit} className="space-y-4">
+            <div>
+              <label className="block text-xs font-medium text-white/50 mb-2">
+                তোমার নাম
+              </label>
+              <input
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="Name"
+                required
+                className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder-white/20 focus:outline-none focus:border-violet-500/50 transition-all"
+              />
+            </div>
+
             <div>
               <label className="block text-xs font-medium text-white/50 mb-2">
                 Email
@@ -62,7 +83,7 @@ export default function LoginPage() {
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Email"
                 required
-                className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder-white/20 focus:outline-none focus:border-violet-500/50 focus:bg-white/8 transition-all"
+                className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder-white/20 focus:outline-none focus:border-violet-500/50 transition-all"
               />
             </div>
 
@@ -74,9 +95,9 @@ export default function LoginPage() {
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="••••••••"
+                placeholder="Minimum 6 character"
                 required
-                className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder-white/20 focus:outline-none focus:border-violet-500/50 focus:bg-white/8 transition-all"
+                className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder-white/20 focus:outline-none focus:border-violet-500/50 transition-all"
               />
             </div>
 
@@ -97,18 +118,18 @@ export default function LoginPage() {
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"/>
                   </svg>
-                  Login হচ্ছে...
+                  Account বানানো হচ্ছে...
                 </span>
               ) : (
-                'Login করো'
+                'Register করো →'
               )}
             </button>
           </form>
 
           <p className="text-center text-xs text-white/30 mt-6">
-            Account নেই?{' '}
-            <Link href="/register" className="text-violet-400 hover:text-violet-300 transition-colors font-medium">
-              Register করো
+            Account আছে?{' '}
+            <Link href="/login" className="text-violet-400 hover:text-violet-300 transition-colors font-medium">
+              Login করো
             </Link>
           </p>
         </div>
