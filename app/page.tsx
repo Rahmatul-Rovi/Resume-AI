@@ -12,6 +12,12 @@ export default function LandingPage() {
           <span className="font-semibold text-sm tracking-wide">ResumeAI</span>
         </div>
         <div className="flex items-center gap-3">
+           <Link
+    href="/dashboard"
+    className="px-4 py-2 text-sm text-white/60 hover:text-white transition-colors"
+  >
+    Dashboard
+  </Link>
           <Link
             href="/login"
             className="px-4 py-2 text-sm text-white/60 hover:text-white transition-colors"
