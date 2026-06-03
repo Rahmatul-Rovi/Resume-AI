@@ -20,24 +20,24 @@ export async function POST(req: Request) {
       )
     }
 
-    // const existing = await prisma.user.findUnique({ where: { email } })
-    // if (existing) {
-    //   return NextResponse.json(
-    //     { error: 'এই email দিয়ে আগেই account আছে' },
-    //     { status: 400 }
-    //   )
-    // }
+    const existing = await prisma.user.findUnique({ where: { email } })
+    if (existing) {
+      return NextResponse.json(
+        { error: 'এই email দিয়ে আগেই account আছে' },
+        { status: 400 }
+      )
+    }
 
-    // const hashed = await bcrypt.hash(password, 12)
+    const hashed = await bcrypt.hash(password, 12)
 
-    // const user = await prisma.user.create({
-    //   data: { name, email, password: hashed },
-    // })
+    const user = await prisma.user.create({
+      data: { name, email, password: hashed },
+    })
 
-    // return NextResponse.json({
-    //   message: 'Account তৈরি হয়েছে!',
-    //   userId: user.id,
-    // })
+    return NextResponse.json({
+      message: 'Account তৈরি হয়েছে!',
+      userId: user.id,
+    })
   } catch (error) {
     console.error('Register error:', error)
     return NextResponse.json(
