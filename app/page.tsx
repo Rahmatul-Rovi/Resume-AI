@@ -1,119 +1,210 @@
-import Link from "next/link";
+'use client'
+
+import Link from 'next/link'
+import { useSession } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
+import { useState } from 'react'
 
 export default function LandingPage() {
+  const { data: session } = useSession()
+  const router = useRouter()
+  const [dragging, setDragging] = useState(false)
+  const [file, setFile] = useState<File | null>(null)
+
+  const handleFile = (f: File) => {
+    if (!session) {
+      router.push('/login')
+      return
+    }
+    if (f.type !== 'application/pdf') {
+      alert('শুধু PDF file upload করো!')
+      return
+    }
+    setFile(f)
+    router.push('/resume/new')
+  }
+
+  const handleUploadClick = () => {
+    if (!session) {
+      router.push('/login')
+      return
+    }
+    router.push('/resume/new')
+  }
+
   return (
-    <main className="min-h-screen bg-[#0A0A0F] text-white overflow-x-hidden">
+    <main className="min-h-screen text-white overflow-x-hidden" style={{
+      background: 'linear-gradient(135deg, #0f0c29 0%, #1a1040 30%, #0d1b2a 60%, #0a1628 100%)'
+    }}>
+      {/* Animated background blobs */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-[-20%] left-[-10%] w-[600px] h-[600px] rounded-full opacity-30 blur-[100px]"
+          style={{ background: 'radial-gradient(circle, #7c3aed, transparent)' }} />
+        <div className="absolute top-[20%] right-[-10%] w-[500px] h-[500px] rounded-full opacity-20 blur-[100px]"
+          style={{ background: 'radial-gradient(circle, #2563eb, transparent)' }} />
+        <div className="absolute bottom-[10%] left-[20%] w-[400px] h-[400px] rounded-full opacity-20 blur-[100px]"
+          style={{ background: 'radial-gradient(circle, #db2777, transparent)' }} />
+        <div className="absolute bottom-[-10%] right-[20%] w-[450px] h-[450px] rounded-full opacity-15 blur-[100px]"
+          style={{ background: 'radial-gradient(circle, #0891b2, transparent)' }} />
+        {/* Grid overlay */}
+        <div className="absolute inset-0 opacity-5"
+          style={{
+            backgroundImage: 'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)',
+            backgroundSize: '60px 60px'
+          }} />
+      </div>
+
       {/* Navbar */}
-      <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-8 py-5 bg-[#0A0A0F]/80 backdrop-blur-md border-b border-white/5">
-        <div className="flex items-center gap-2">
-          <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-violet-500 to-indigo-600 flex items-center justify-center text-xs font-bold">
+      <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-8 py-4"
+        style={{ background: 'rgba(15, 12, 41, 0.6)', backdropFilter: 'blur(20px)', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+        <Link href="/" className="flex items-center gap-2.5 group">
+          <div className="w-8 h-8 rounded-xl flex items-center justify-center text-sm font-black"
+            style={{ background: 'linear-gradient(135deg, #7c3aed, #2563eb)' }}>
             R
           </div>
-          <span className="font-semibold text-sm tracking-wide">ResumeAI</span>
-        </div>
-        <div className="flex items-center gap-3">
-           <Link
-    href="/dashboard"
-    className="px-4 py-2 text-sm text-white/60 hover:text-white transition-colors"
-  >
-    Dashboard
-  </Link>
-          <Link
-            href="/login"
-            className="px-4 py-2 text-sm text-white/60 hover:text-white transition-colors"
-          >
-            Login
-          </Link>
-          <Link
-            href="/register"
-            className="px-4 py-2 text-sm bg-violet-600 hover:bg-violet-500 rounded-lg transition-colors font-medium"
-          >
-            Get Started
-          </Link>
+          <span className="font-bold text-sm tracking-wide group-hover:text-violet-300 transition-colors">ResumeAI</span>
+        </Link>
+
+        <div className="flex items-center gap-2">
+          {session ? (
+            <>
+              <span className="text-xs text-white/40 mr-2">👋 {session.user?.name}</span>
+              <Link href="/dashboard"
+                className="px-4 py-2 text-sm font-medium rounded-xl transition-all"
+                style={{ background: 'linear-gradient(135deg, #7c3aed, #2563eb)' }}>
+                Dashboard
+              </Link>
+            </>
+          ) : (
+            <>
+              <Link href="/login"
+                className="px-4 py-2 text-sm text-white/60 hover:text-white transition-colors rounded-xl hover:bg-white/5">
+                Login
+              </Link>
+              <Link href="/register"
+                className="px-4 py-2 text-sm font-medium rounded-xl transition-all hover:opacity-90"
+                style={{ background: 'linear-gradient(135deg, #7c3aed, #2563eb)' }}>
+                Get Started
+              </Link>
+            </>
+          )}
         </div>
       </nav>
 
       {/* Hero */}
       <section className="relative flex flex-col items-center justify-center min-h-screen text-center px-6 pt-20">
-        {/* Background glow */}
-        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-violet-700/20 rounded-full blur-[120px] pointer-events-none" />
-        <div className="absolute top-1/2 left-1/4 w-[300px] h-[300px] bg-indigo-600/10 rounded-full blur-[80px] pointer-events-none" />
-
-        <div className="relative z-10 max-w-3xl mx-auto">
+        <div className="relative z-10 max-w-4xl mx-auto">
           {/* Badge */}
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-violet-500/30 bg-violet-500/10 text-violet-300 text-xs font-medium mb-8">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-8 text-xs font-medium"
+            style={{ background: 'rgba(124, 58, 237, 0.15)', border: '1px solid rgba(124, 58, 237, 0.3)', color: '#c4b5fd' }}>
             <span className="w-1.5 h-1.5 rounded-full bg-violet-400 animate-pulse" />
-            Powered by Gemini AI
+            ✨ Powered by Gemini AI — সম্পূর্ণ বাংলায়
           </div>
 
-          <h1 className="text-5xl md:text-7xl font-bold leading-tight mb-6 tracking-tight">
-            তোমার Resume কে{" "}
-            <span className="bg-gradient-to-r from-violet-400 to-indigo-400 bg-clip-text text-transparent">
-              Smarter
-            </span>{" "}
-            করো
+          <h1 className="text-5xl md:text-7xl font-black leading-[1.1] mb-6 tracking-tight">
+            তোমার Resume কে{' '}
+            <span className="relative">
+              <span style={{
+                background: 'linear-gradient(135deg, #a78bfa, #60a5fa, #f472b6)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent'
+              }}>
+                Smarter
+              </span>
+            </span>
+            {' '}করো
           </h1>
 
-          <p className="text-lg text-white/50 max-w-xl mx-auto mb-10 leading-relaxed">
-            Resume upload করো, Job Description দাও — AI তোমাকে বলবে কোথায়
-            কোথায় improve করতে হবে এবং কতটা match করছো।
+          <p className="text-lg md:text-xl mb-12 max-w-2xl mx-auto leading-relaxed" style={{ color: 'rgba(255,255,255,0.5)' }}>
+            Resume upload করো, Job Description দাও — AI বলবে কোথায় improve করতে হবে এবং কতটা match করছে।
           </p>
 
+          {/* Upload Box — Hero তে */}
+          <div
+            onDragOver={(e) => { e.preventDefault(); setDragging(true) }}
+            onDragLeave={() => setDragging(false)}
+            onDrop={(e) => {
+              e.preventDefault()
+              setDragging(false)
+              const f = e.dataTransfer.files[0]
+              if (f) handleFile(f)
+            }}
+            onClick={handleUploadClick}
+            className="relative cursor-pointer mx-auto max-w-xl rounded-2xl p-10 mb-8 transition-all"
+            style={{
+              background: dragging ? 'rgba(124, 58, 237, 0.15)' : 'rgba(255,255,255,0.03)',
+              border: dragging ? '2px dashed #7c3aed' : '2px dashed rgba(255,255,255,0.1)',
+              backdropFilter: 'blur(10px)'
+            }}
+          >
+            <div className="text-5xl mb-4">📄</div>
+            <p className="text-base font-semibold mb-1">
+              {session ? 'Resume drag করো অথবা click করো' : 'Resume upload করতে login করো'}
+            </p>
+            <p className="text-sm" style={{ color: 'rgba(255,255,255,0.3)' }}>
+              {session ? 'PDF format · সর্বোচ্চ 4MB' : 'Click করলে login page এ যাবে'}
+            </p>
+            {!session && (
+              <div className="mt-4 inline-block px-5 py-2 rounded-xl text-sm font-medium"
+                style={{ background: 'linear-gradient(135deg, #7c3aed, #2563eb)' }}>
+                Login করো →
+              </div>
+            )}
+          </div>
+
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Link
-              href="/register"
-              className="w-full sm:w-auto px-8 py-3.5 bg-violet-600 hover:bg-violet-500 rounded-xl text-sm font-semibold transition-all hover:scale-105 hover:shadow-lg hover:shadow-violet-500/25"
-            >
+            <Link href="/register"
+              className="w-full sm:w-auto px-8 py-3.5 rounded-xl text-sm font-bold transition-all hover:scale-105 hover:opacity-90"
+              style={{ background: 'linear-gradient(135deg, #7c3aed, #2563eb)' }}>
               Free তে শুরু করো →
             </Link>
-            <Link
-              href="#how-it-works"
-              className="w-full sm:w-auto px-8 py-3.5 border border-white/10 hover:border-white/20 rounded-xl text-sm font-medium text-white/60 hover:text-white transition-all"
-            >
+            <a href="#how-it-works"
+              className="w-full sm:w-auto px-8 py-3.5 rounded-xl text-sm font-medium transition-all hover:bg-white/10"
+              style={{ border: '1px solid rgba(255,255,255,0.1)', color: 'rgba(255,255,255,0.6)' }}>
               কিভাবে কাজ করে?
-            </Link>
+            </a>
           </div>
         </div>
 
-        {/* Mock UI card */}
+        {/* Floating mock card */}
         <div className="relative z-10 mt-20 w-full max-w-2xl mx-auto">
-          <div className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm p-6 text-left shadow-2xl shadow-black/50">
-            <div className="flex items-center gap-2 mb-4">
+          <div className="rounded-2xl p-6 text-left shadow-2xl"
+            style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', backdropFilter: 'blur(20px)' }}>
+            <div className="flex items-center gap-2 mb-5">
               <div className="w-3 h-3 rounded-full bg-red-500/60" />
               <div className="w-3 h-3 rounded-full bg-yellow-500/60" />
               <div className="w-3 h-3 rounded-full bg-green-500/60" />
-              <span className="ml-2 text-xs text-white/30">analysis-result.tsx</span>
+              <span className="ml-2 text-xs" style={{ color: 'rgba(255,255,255,0.2)' }}>analysis-result.tsx</span>
             </div>
-            <div className="space-y-3">
+            <div className="space-y-4">
               <div className="flex items-center justify-between">
-                <span className="text-sm text-white/60">Match Score</span>
-                <span className="text-2xl font-bold text-violet-400">87%</span>
+                <span className="text-sm" style={{ color: 'rgba(255,255,255,0.5)' }}>Match Score</span>
+                <span className="text-3xl font-black" style={{
+                  background: 'linear-gradient(135deg, #a78bfa, #60a5fa)',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent'
+                }}>87%</span>
               </div>
-              <div className="w-full bg-white/5 rounded-full h-2">
-                <div className="bg-gradient-to-r from-violet-500 to-indigo-500 h-2 rounded-full w-[87%]" />
+              <div className="w-full rounded-full h-2" style={{ background: 'rgba(255,255,255,0.05)' }}>
+                <div className="h-2 rounded-full w-[87%]"
+                  style={{ background: 'linear-gradient(90deg, #7c3aed, #2563eb)' }} />
               </div>
-              <div className="grid grid-cols-2 gap-3 mt-4">
+              <div className="grid grid-cols-2 gap-3 mt-2">
                 {[
-                  { label: "Skills Match", val: "92%", color: "text-green-400" },
-                  { label: "Experience", val: "78%", color: "text-yellow-400" },
-                  { label: "Keywords", val: "85%", color: "text-blue-400" },
-                  { label: "Format", val: "95%", color: "text-violet-400" },
+                  { label: 'Skills Match', val: '92%', color: '#4ade80' },
+                  { label: 'Experience', val: '78%', color: '#facc15' },
+                  { label: 'Keywords', val: '85%', color: '#60a5fa' },
+                  { label: 'Format', val: '95%', color: '#c084fc' },
                 ].map((item) => (
-                  <div
-                    key={item.label}
-                    className="bg-white/5 rounded-lg p-3 border border-white/5"
-                  >
-                    <div className="text-xs text-white/40 mb-1">{item.label}</div>
-                    <div className={`text-lg font-semibold ${item.color}`}>
-                      {item.val}
-                    </div>
+                  <div key={item.label} className="rounded-xl p-3"
+                    style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.06)' }}>
+                    <div className="text-xs mb-1" style={{ color: 'rgba(255,255,255,0.3)' }}>{item.label}</div>
+                    <div className="text-xl font-bold" style={{ color: item.color }}>{item.val}</div>
                   </div>
                 ))}
               </div>
-              <div className="mt-3 p-3 bg-violet-500/10 border border-violet-500/20 rounded-lg">
-                <p className="text-xs text-violet-300">
-                  💡 "React" keyword টা আরো ২ বার mention করলে score বাড়বে।
-                </p>
+              <div className="p-3 rounded-xl" style={{ background: 'rgba(124,58,237,0.1)', border: '1px solid rgba(124,58,237,0.2)' }}>
+                <p className="text-xs" style={{ color: '#c4b5fd' }}>💡 "React" keyword টা আরো ২ বার mention করলে score বাড়বে।</p>
               </div>
             </div>
           </div>
@@ -121,50 +212,28 @@ export default function LandingPage() {
       </section>
 
       {/* How it works */}
-      <section id="how-it-works" className="py-32 px-6">
-        <div className="max-w-4xl mx-auto">
+      <section id="how-it-works" className="py-32 px-6 relative">
+        <div className="max-w-5xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">
-              মাত্র ৩টি Step
-            </h2>
-            <p className="text-white/40 text-sm">সহজ, দ্রুত, কার্যকর</p>
+            <div className="inline-block px-4 py-1.5 rounded-full text-xs font-medium mb-4"
+              style={{ background: 'rgba(124,58,237,0.15)', border: '1px solid rgba(124,58,237,0.3)', color: '#c4b5fd' }}>
+              কিভাবে কাজ করে
+            </div>
+            <h2 className="text-3xl md:text-5xl font-black mb-4">মাত্র ৩টি Step</h2>
+            <p className="text-sm" style={{ color: 'rgba(255,255,255,0.4)' }}>সহজ, দ্রুত, কার্যকর</p>
           </div>
 
           <div className="grid md:grid-cols-3 gap-6">
             {[
-              {
-                num: "01",
-                title: "Resume Upload করো",
-                desc: "PDF format এ তোমার resume upload করো। আমরা automatically text extract করি।",
-                color: "from-violet-500/20 to-violet-500/5",
-                border: "border-violet-500/20",
-              },
-              {
-                num: "02",
-                title: "Job Description দাও",
-                desc: "যে job এ apply করবে সেই job description paste করো।",
-                color: "from-indigo-500/20 to-indigo-500/5",
-                border: "border-indigo-500/20",
-              },
-              {
-                num: "03",
-                title: "AI Analysis পাও",
-                desc: "Gemini AI তোমার resume analyze করে score এবং specific suggestions দেবে।",
-                color: "from-blue-500/20 to-blue-500/5",
-                border: "border-blue-500/20",
-              },
+              { num: '01', title: 'Resume Upload করো', desc: 'PDF format এ তোমার resume upload করো। আমরা automatically text extract করি।', gradient: 'from-violet-600/20 to-violet-600/5', border: 'rgba(124,58,237,0.25)', glow: '#7c3aed' },
+              { num: '02', title: 'Job Description দাও', desc: 'যে job এ apply করবে সেই job description paste করো।', gradient: 'from-blue-600/20 to-blue-600/5', border: 'rgba(37,99,235,0.25)', glow: '#2563eb' },
+              { num: '03', title: 'AI Analysis পাও', desc: 'Gemini AI তোমার resume analyze করে score এবং specific suggestions দেবে।', gradient: 'from-pink-600/20 to-pink-600/5', border: 'rgba(219,39,119,0.25)', glow: '#db2777' },
             ].map((step) => (
-              <div
-                key={step.num}
-                className={`relative p-6 rounded-2xl bg-gradient-to-b ${step.color} border ${step.border}`}
-              >
-                <div className="text-4xl font-black text-white/10 mb-4">
-                  {step.num}
-                </div>
-                <h3 className="text-base font-semibold mb-2">{step.title}</h3>
-                <p className="text-sm text-white/40 leading-relaxed">
-                  {step.desc}
-                </p>
+              <div key={step.num} className={`relative p-7 rounded-2xl bg-gradient-to-b ${step.gradient} transition-all hover:-translate-y-1`}
+                style={{ border: `1px solid ${step.border}` }}>
+                <div className="text-5xl font-black mb-5" style={{ color: 'rgba(255,255,255,0.06)' }}>{step.num}</div>
+                <h3 className="text-base font-bold mb-3">{step.title}</h3>
+                <p className="text-sm leading-relaxed" style={{ color: 'rgba(255,255,255,0.4)' }}>{step.desc}</p>
               </div>
             ))}
           </div>
@@ -172,26 +241,24 @@ export default function LandingPage() {
       </section>
 
       {/* Features */}
-      <section className="py-20 px-6 border-t border-white/5">
+      <section className="py-20 px-6" style={{ borderTop: '1px solid rgba(255,255,255,0.05)' }}>
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold mb-4">কেন ResumeAI?</h2>
+            <h2 className="text-3xl md:text-4xl font-black mb-4">কেন ResumeAI?</h2>
           </div>
           <div className="grid md:grid-cols-2 gap-4">
             {[
-              { icon: "⚡", title: "Instant Analysis", desc: "মাত্র কয়েক সেকেন্ডে পুরো resume analyze হয়।" },
-              { icon: "🎯", title: "Job-specific Score", desc: "প্রতিটি job এর জন্য আলাদা match score পাবে।" },
-              { icon: "💡", title: "Smart Suggestions", desc: "কোন keyword missing সেটা সরাসরি বলে দেয়।" },
-              { icon: "🔒", title: "সম্পূর্ণ Private", desc: "তোমার resume data শুধু তোমার কাছেই থাকে।" },
+              { icon: '⚡', title: 'Instant Analysis', desc: 'মাত্র কয়েক সেকেন্ডে পুরো resume analyze হয়।', color: 'rgba(250,204,21,0.1)', border: 'rgba(250,204,21,0.2)' },
+              { icon: '🎯', title: 'Job-specific Score', desc: 'প্রতিটি job এর জন্য আলাদা match score পাবে।', color: 'rgba(124,58,237,0.1)', border: 'rgba(124,58,237,0.2)' },
+              { icon: '💡', title: 'Smart Suggestions', desc: 'কোন keyword missing সেটা সরাসরি বলে দেয়।', color: 'rgba(37,99,235,0.1)', border: 'rgba(37,99,235,0.2)' },
+              { icon: '🔒', title: 'সম্পূর্ণ Private', desc: 'তোমার resume data শুধু তোমার কাছেই থাকে।', color: 'rgba(16,185,129,0.1)', border: 'rgba(16,185,129,0.2)' },
             ].map((f) => (
-              <div
-                key={f.title}
-                className="flex gap-4 p-5 rounded-xl border border-white/5 bg-white/3 hover:bg-white/5 transition-colors"
-              >
+              <div key={f.title} className="flex gap-4 p-5 rounded-2xl transition-all hover:-translate-y-0.5"
+                style={{ background: f.color, border: `1px solid ${f.border}` }}>
                 <div className="text-2xl">{f.icon}</div>
                 <div>
-                  <h3 className="text-sm font-semibold mb-1">{f.title}</h3>
-                  <p className="text-xs text-white/40 leading-relaxed">{f.desc}</p>
+                  <h3 className="text-sm font-bold mb-1">{f.title}</h3>
+                  <p className="text-xs leading-relaxed" style={{ color: 'rgba(255,255,255,0.4)' }}>{f.desc}</p>
                 </div>
               </div>
             ))}
@@ -201,19 +268,19 @@ export default function LandingPage() {
 
       {/* CTA */}
       <section className="py-32 px-6 text-center">
-        <div className="relative max-w-xl mx-auto">
-          <div className="absolute inset-0 bg-violet-600/20 rounded-3xl blur-[60px]" />
-          <div className="relative p-12 rounded-3xl border border-violet-500/20 bg-violet-500/5">
-            <h2 className="text-3xl font-bold mb-4">
-              আজই শুরু করো
-            </h2>
-            <p className="text-white/40 text-sm mb-8">
+        <div className="relative max-w-2xl mx-auto">
+          <div className="absolute inset-0 rounded-3xl blur-[60px] opacity-30"
+            style={{ background: 'linear-gradient(135deg, #7c3aed, #2563eb)' }} />
+          <div className="relative p-14 rounded-3xl"
+            style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(124,58,237,0.3)', backdropFilter: 'blur(20px)' }}>
+            <div className="text-4xl mb-4">🚀</div>
+            <h2 className="text-3xl md:text-4xl font-black mb-4">আজই শুরু করো</h2>
+            <p className="text-sm mb-8" style={{ color: 'rgba(255,255,255,0.4)' }}>
               Account বানাও, resume upload করো — সম্পূর্ণ free।
             </p>
-            <Link
-              href="/register"
-              className="inline-block px-10 py-4 bg-violet-600 hover:bg-violet-500 rounded-xl font-semibold text-sm transition-all hover:scale-105 hover:shadow-xl hover:shadow-violet-500/30"
-            >
+            <Link href="/register"
+              className="inline-block px-10 py-4 rounded-xl font-bold text-sm transition-all hover:scale-105 hover:opacity-90"
+              style={{ background: 'linear-gradient(135deg, #7c3aed, #2563eb)' }}>
               Free Account বানাও →
             </Link>
           </div>
@@ -221,11 +288,16 @@ export default function LandingPage() {
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-white/5 py-8 px-6 text-center">
-        <p className="text-xs text-white/20">
+      <footer className="py-8 px-6 text-center" style={{ borderTop: '1px solid rgba(255,255,255,0.05)' }}>
+        <div className="flex items-center justify-center gap-2 mb-3">
+          <div className="w-6 h-6 rounded-lg flex items-center justify-center text-xs font-black"
+            style={{ background: 'linear-gradient(135deg, #7c3aed, #2563eb)' }}>R</div>
+          <span className="text-sm font-semibold">ResumeAI</span>
+        </div>
+        <p className="text-xs" style={{ color: 'rgba(255,255,255,0.2)' }}>
           © 2025 ResumeAI · Built with Next.js + Gemini AI
         </p>
       </footer>
     </main>
-  );
+  )
 }
