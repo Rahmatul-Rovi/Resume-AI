@@ -28,7 +28,6 @@ export default function LoginPage() {
         setError('Email বা Password ভুল হয়েছে।')
         setLoading(false)
       } else {
-        // Redirect করার আগে loading ট্রু-ই থাকবে যাতে ফ্লিকার না করে
         router.push('/dashboard')
         router.refresh()
       }
@@ -65,7 +64,7 @@ export default function LoginPage() {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="you@example.com"
+                placeholder="Enter Your Email"
                 required
                 className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-violet-600 focus:bg-white transition-all shadow-sm"
               />
@@ -78,7 +77,7 @@ export default function LoginPage() {
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="••••••••"
+                placeholder="Enter Your Password"
                 required
                 className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-violet-600 focus:bg-white transition-all shadow-sm"
               />
