@@ -27,7 +27,17 @@ export async function POST(req:Request) {
      if(!content){
       return NextResponse.json({error: 'Content Missing'}, {status: 400})
      }
+     const resume = await prisma.resume.create({
+      data: {
+        title: title || 'My Resume',
+        content,
+        fileUrl: fileUrl || '',
+        userId: session.user.id,
+      },
+     })
+     return NextResponse.json({resumeId: resume.id})
    }catch(error){
-
+     console.error('Resume Create Error:', error)
+     return NextResponse.json({error: 'Server Error'}, {status:500})
    }
 }
