@@ -26,7 +26,22 @@ export async function POST(req:Request) {
       return NextResponse.json({ error: 'File 4MB এর বেশি' }, { status: 400 })
     }
 
+    const arrayBuffer = await file.arrayBuffer()
+    const buffer = buffer.form(arrayBuffer)
+    const pdfData = await pdf(buffer)
+    const extractedText = pdfData.text?.trim()
+    if(!extractedText || extractedText.length<50){
+      return NextResponse.json(
+        { error: 'PDF থেকে text extract করা যায়নি' },
+        { status: 400 }
+      )
+    }
+    return NextResponse.json({
+      text: extractedText,
+      pages:pdfData.numPages
+    })
     } catch(error){
-
+     console.error('Upload Error:', error)
+     return NextResponse.json({ error: 'File process করতে সমস্যা' }, { status: 500 })
     }
 }
