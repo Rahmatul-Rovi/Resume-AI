@@ -16,3 +16,18 @@ export async function GET(){
  })
  return NextResponse.json(resumes)
 }
+
+export async function POST(req:Request) {
+   const session = await getServerSession(authOptions)
+   if(!session?.user?.id){
+      return NextResponse.json({error: 'Unauthorized'}, {status: 401})
+   }
+   try{
+     const {title, content, fileUrl} = await req.json()
+     if(!content){
+      return NextResponse.json({error: 'Content Missing'}, {status: 400})
+     }
+   }catch(error){
+
+   }
+}
