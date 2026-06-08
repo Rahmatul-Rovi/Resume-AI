@@ -15,6 +15,10 @@ export async function POST(req:Request) {
     try{
 
     } catch(error){
-        
+         console.error('Analyze error:', error)
+    return NextResponse.json(
+      { error: 'AI analysis এ সমস্যা হয়েছে' },
+      { status: 500 }
+    )
     }
 }
