@@ -55,6 +55,33 @@ Rules:
 - Be specific and actionable
 `
 
+const model = genAI.getGenerativeModel({model: 'gemini-1.5-flash'})
+const result = await model.generateContent(prompt)
+const text = result.response.text().trim()
+
+//JSON Parse 
+const jsonMatch = text.match(/\{[\s\S]*\}/)
+if(!jsonMatch){
+  throw new Error('Invalid AI Response')
+}
+
+const analysisData = JSON.parse(jsonMatch[0])
+
+//Database Save
+ const analysis = await prisma.analysis.create({
+      data: {
+        resumeId,
+        score: analysisData.score,
+        jobDesc: jobDesc || null,
+        suggestions: analysisData,
+      },
+    })
+ 
+    return NextResponse.json({
+      analysisId: analysis.id,
+      ...analysisData,
+    })
+
     } catch(error){
          console.error('Analyze error:', error)
     return NextResponse.json(
