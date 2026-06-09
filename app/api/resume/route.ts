@@ -27,7 +27,7 @@ export async function POST(req:Request) {
     }
 
     const arrayBuffer = await file.arrayBuffer()
-    const buffer = buffer.form(arrayBuffer)
+    const buffer = Buffer.from(arrayBuffer)
     const pdfData = await pdf(buffer)
     const extractedText = pdfData.text?.trim()
     if(!extractedText || extractedText.length<50){
@@ -38,7 +38,7 @@ export async function POST(req:Request) {
     }
     return NextResponse.json({
       text: extractedText,
-      pages:pdfData.numPages
+      pages:pdfData.numpages
     })
     } catch(error){
      console.error('Upload Error:', error)
