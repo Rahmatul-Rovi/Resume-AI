@@ -1,47 +1,42 @@
-import { authOptions } from "@/lib/auth";
+import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
-import {  NextResponse } from "next/server";
-import pdf from 'pdf-parse'
+import { authOptions } from "@/lib/auth";
+import { prisma } from "@/lib/prisma";
 
+export async function GET() {
+  const session = await getServerSession(authOptions)
+  if (!session?.user?.id) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  }
+  const resumes = await prisma.resume.findMany({
+    where: { userId: session.user.id },
+    orderBy: { createdAt: 'desc' },
+    select: { id: true, title: true, fileUrl: true, createdAt: true },
+  })
+  return NextResponse.json(resumes)
+}
 
-export async function POST(req:Request) {
-    const session = await getServerSession(authOptions)
-    if(!session?.user?.id){
-        return NextResponse.json({error: 'unAuthorized'}, {status: 401})
+export async function POST(req: Request) {
+  const session = await getServerSession(authOptions)
+  if (!session?.user?.id) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  }
+  try {
+    const { title, content, fileUrl } = await req.json()
+    if (!content) {
+      return NextResponse.json({ error: 'Content Missing' }, { status: 400 })
     }
-
-    try{
-   const formData = await req.formData()
-   const file = formData.get('file') as File
-    
-   if (!file) {
-      return NextResponse.json({ error: 'File নেই' }, { status: 400 })
-    }
-
-    if (file.type !== 'application/pdf') {
-      return NextResponse.json({ error: 'শুধু PDF চলবে' }, { status: 400 })
-    }
-
-    if (file.size > 4 * 1024 * 1024) {
-      return NextResponse.json({ error: 'File 4MB এর বেশি' }, { status: 400 })
-    }
-
-    const arrayBuffer = await file.arrayBuffer()
-    const buffer = Buffer.from(arrayBuffer)
-    const pdfData = await pdf(buffer)
-    const extractedText = pdfData.text?.trim()
-    if(!extractedText || extractedText.length<50){
-      return NextResponse.json(
-        { error: 'PDF থেকে text extract করা যায়নি' },
-        { status: 400 }
-      )
-    }
-    return NextResponse.json({
-      text: extractedText,
-      pages:pdfData.numpages
+    const resume = await prisma.resume.create({
+      data: {
+        title: title || 'My Resume',
+        content,
+        fileUrl: fileUrl || '',
+        userId: session.user.id,
+      },
     })
-    } catch(error){
-     console.error('Upload Error:', error)
-     return NextResponse.json({ error: 'File process করতে সমস্যা' }, { status: 500 })
-    }
+    return NextResponse.json({ resumeId: resume.id })
+  } catch (error) {
+    console.error('Resume Create Error:', error)
+    return NextResponse.json({ error: 'Server Error' }, { status: 500 })
+  }
 }
