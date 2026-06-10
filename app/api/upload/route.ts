@@ -1,8 +1,7 @@
-import { authOptions } from "@/lib/auth";
-import { getServerSession } from "next-auth";
-import { NextResponse } from "next/server";
-
-const pdf = require('pdf-parse')
+import { NextResponse } from 'next/server'
+import { getServerSession } from 'next-auth'
+import { authOptions } from '@/lib/auth'
+import { extractText } from 'unpdf'
 
 export async function POST(req: Request) {
   const session = await getServerSession(authOptions)
@@ -25,9 +24,9 @@ export async function POST(req: Request) {
     }
 
     const arrayBuffer = await file.arrayBuffer()
-    const buffer = Buffer.from(arrayBuffer)
-    const pdfData = await pdf(buffer)
-    const extractedText = pdfData.text?.trim()
+    const { text } = await extractText(new Uint8Array(arrayBuffer), { mergePages: true })
+
+    const extractedText = text?.trim()
 
     if (!extractedText || extractedText.length < 50) {
       return NextResponse.json(
@@ -36,10 +35,7 @@ export async function POST(req: Request) {
       )
     }
 
-    return NextResponse.json({
-      text: extractedText,
-      pages: pdfData.numpages,
-    })
+    return NextResponse.json({ text: extractedText })
   } catch (error) {
     console.error('Upload Error:', error)
     return NextResponse.json({ error: 'File process করতে সমস্যা' }, { status: 500 })
