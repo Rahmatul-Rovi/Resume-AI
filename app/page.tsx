@@ -53,14 +53,20 @@ export default function LandingPage() {
           </span>
         </Link>
 
-        <div className="hidden md:flex items-center gap-8">
-          {['Features', 'How it Works', 'Pricing'].map((item) => (
-            <a key={item} href="#" className="text-sm transition-colors hover:text-white"
-              style={{ color: 'rgba(255,255,255,0.5)' }}>
-              {item}
-            </a>
-          ))}
-        </div>
+       <div className="hidden md:flex items-center gap-8">
+  <Link href="/" className="text-sm transition-colors hover:text-white"
+    style={{ color: 'rgba(255,255,255,0.5)' }}>
+    Home
+  </Link>
+  <Link href="/about" className="text-sm transition-colors hover:text-white"
+    style={{ color: 'rgba(255,255,255,0.5)' }}>
+    About Us
+  </Link>
+  <Link href="/contact" className="text-sm transition-colors hover:text-white"
+    style={{ color: 'rgba(255,255,255,0.5)' }}>
+    Contact Us
+  </Link>
+</div>
 
         <div className="flex items-center gap-3">
           {session ? (
