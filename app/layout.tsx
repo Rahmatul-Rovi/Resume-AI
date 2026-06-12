@@ -1,9 +1,9 @@
 import type { Metadata } from 'next'
 import './globals.css'
 import SessionProvider from '@/components/SessionProvider'
-import Navbar from '@/components/Navbar'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
+import Navbar from './components/Navbar'
 
 export const metadata: Metadata = {
   title: 'ResumeAI — AI দিয়ে Resume Smarter করো',
