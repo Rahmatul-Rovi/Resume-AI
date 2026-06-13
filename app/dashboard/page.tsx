@@ -4,7 +4,6 @@ import { authOptions } from '@/lib/auth'
 import { redirect } from 'next/navigation'
 import { prisma } from '@/lib/prisma'
 import Link from 'next/link'
-import LogoutButton from '@/components/LogoutButton'
 
 function ScoreBadge({ score }: { score: number | null }) {
   if (score === null)
@@ -67,7 +66,7 @@ export default async function DashboardPage() {
           style={{ background: 'radial-gradient(circle, #2563eb, transparent)' }} />
       </div>
 
-      {/* Navbar */}
+      {/* Navbar
       <nav className="relative z-10 flex items-center justify-between px-8 py-4"
         style={{ background: 'rgba(15,12,41,0.6)', backdropFilter: 'blur(20px)', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
         <Link href="/" className="flex items-center gap-2.5 group">
@@ -90,9 +89,9 @@ export default async function DashboardPage() {
           </div>
           <LogoutButton />
         </div>
-      </nav>
+      </nav> */}
 
-      <main className="relative z-10 max-w-5xl mx-auto px-6 py-12">
+      <main className="relative z-10 max-w-5xl mx-auto px-6 py-12 pt-24">
         {/* Header */}
         <div className="flex items-center justify-between mb-10">
           <div>

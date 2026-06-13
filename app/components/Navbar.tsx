@@ -9,9 +9,9 @@ export default function Navbar() {
   const { data: session } = useSession()
   const pathname = usePathname()
 
-  if (pathname?.startsWith('/dashboard') || pathname?.startsWith('/resume')) {
-    return null
-  }
+  // if (pathname?.startsWith('/dashboard') || pathname?.startsWith('/resume')) {
+  //   return null
+  // }
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-10 py-4"
