@@ -68,33 +68,46 @@ export default function LandingPage() {
   </Link>
 </div>
 
-        <div className="flex items-center gap-3">
-          {session ? (
-            <>
-              <span className="text-xs hidden sm:block" style={{ color: 'rgba(255,255,255,0.4)' }}>
-                👋 {session.user?.name}
-              </span>
-              <Link href="/dashboard"
-                className="px-5 py-2 text-sm font-semibold rounded-xl transition-all hover:opacity-90 hover:scale-105"
-                style={{ background: 'linear-gradient(135deg, #7c3aed, #2563eb)' }}>
-                Dashboard →
-              </Link>
-            </>
-          ) : (
-            <>
-              <Link href="/login"
-                className="px-4 py-2 text-sm rounded-xl transition-colors hover:bg-white/5"
-                style={{ color: 'rgba(255,255,255,0.6)' }}>
-                Login
-              </Link>
-              <Link href="/register"
-                className="px-5 py-2 text-sm font-semibold rounded-xl transition-all hover:opacity-90 hover:scale-105"
-                style={{ background: 'linear-gradient(135deg, #7c3aed, #2563eb)' }}>
-                Get Started
-              </Link>
-            </>
-          )}
+      <div className="flex items-center gap-3">
+  {session ? (
+    <>
+      <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-xl"
+        style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)' }}>
+        <div className="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold"
+          style={{ background: 'linear-gradient(135deg, #7c3aed, #2563eb)' }}>
+          {session.user?.name?.charAt(0).toUpperCase()}
         </div>
+        <span className="text-sm" style={{ color: 'rgba(255,255,255,0.6)' }}>
+          {session.user?.name?.split(' ')[0]}
+        </span>
+      </div>
+      <Link href="/dashboard"
+        className="px-5 py-2 text-sm font-semibold rounded-xl transition-all hover:opacity-90 hover:scale-105"
+        style={{ background: 'linear-gradient(135deg, #7c3aed, #2563eb)' }}>
+        Dashboard →
+      </Link>
+      <button
+        onClick={() => signOut({ callbackUrl: '/' })}
+        className="px-4 py-2 text-sm rounded-xl transition-all hover:bg-white/10"
+        style={{ color: 'rgba(255,255,255,0.4)', border: '1px solid rgba(255,255,255,0.08)' }}>
+        Logout
+      </button>
+    </>
+  ) : (
+    <>
+      <Link href="/login"
+        className="px-4 py-2 text-sm rounded-xl transition-colors hover:bg-white/5"
+        style={{ color: 'rgba(255,255,255,0.6)' }}>
+        Login
+      </Link>
+      <Link href="/register"
+        className="px-5 py-2 text-sm font-semibold rounded-xl transition-all hover:opacity-90 hover:scale-105"
+        style={{ background: 'linear-gradient(135deg, #7c3aed, #2563eb)' }}>
+        Get Started
+      </Link>
+    </>
+  )}
+</div>
       </nav>
 
       {/* Hero */}
