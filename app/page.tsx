@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
+import { signOut } from 'next-auth/react'
 
 export default function LandingPage() {
   const { data: session } = useSession()

@@ -4,6 +4,7 @@ import SessionProvider from '@/components/SessionProvider'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import Navbar from './components/Navbar'
+import Footer from './components/Footer'
 
 export const metadata: Metadata = {
   title: 'ResumeAI — AI দিয়ে Resume Smarter করো',
@@ -23,6 +24,7 @@ export default async function RootLayout({
         <SessionProvider session={session}>
           <Navbar />
           {children}
+          <Footer />
         </SessionProvider>
       </body>
     </html>
