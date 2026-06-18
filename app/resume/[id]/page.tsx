@@ -30,12 +30,13 @@ function ScoreRing({ score }: { score: number }) {
   )
 }
 
-export default async function AnalysisPage({ params }: { params: { id: string } }) {
+export default async function AnalysisPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
   const session = await getServerSession(authOptions)
   if (!session) redirect('/login')
 
   const resume = await prisma.resume.findFirst({
-    where: { id: params.id, userId: session.user.id },
+   where: { id: id, userId: session.user.id },
     include: {
       analyses: { orderBy: { createdAt: 'desc' }, take: 1 },
     },
