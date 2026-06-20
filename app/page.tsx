@@ -117,7 +117,7 @@ export default function LandingPage() {
           <div className="inline-flex items-center gap-2 px-5 py-2 rounded-full mb-10 text-xs font-semibold"
             style={{ background: 'rgba(124,58,237,0.15)', border: '1px solid rgba(124,58,237,0.35)', color: '#c4b5fd' }}>
             <span className="w-1.5 h-1.5 rounded-full bg-violet-400 animate-pulse" />
-            ✨ Powered by Gemini AI · সম্পূর্ণ বাংলায়
+            ✨ Powered by Google AI · সম্পূর্ণ বাংলায়
           </div>
 
           <h1 className="text-6xl md:text-8xl font-black leading-[1.05] mb-8 tracking-tight">
@@ -254,10 +254,10 @@ export default function LandingPage() {
       <section className="py-20 px-6" style={{ borderTop: '1px solid rgba(255,255,255,0.05)', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
         <div className="max-w-4xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
           {[
-            { num: '১০,০০০+', label: 'Resume Analyzed' },
-            { num: '৯৫%', label: 'Accuracy Rate' },
-            { num: '৩০s', label: 'Average Time' },
-            { num: '১০০%', label: 'Free to Use' },
+            { num: '10,000+', label: 'Resume Analyzed' },
+            { num: '95%', label: 'Accuracy Rate' },
+            { num: '30s', label: 'Average Time' },
+            { num: '100%', label: 'Free to Use' },
           ].map((stat) => (
             <div key={stat.label}>
               <div className="text-4xl font-black mb-2" style={{
