@@ -66,37 +66,13 @@ export default async function DashboardPage() {
           style={{ background: 'radial-gradient(circle, #2563eb, transparent)' }} />
       </div>
 
-      {/* Navbar
-      <nav className="relative z-10 flex items-center justify-between px-8 py-4"
-        style={{ background: 'rgba(15,12,41,0.6)', backdropFilter: 'blur(20px)', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
-        <Link href="/" className="flex items-center gap-2.5 group">
-          <div className="w-8 h-8 rounded-xl flex items-center justify-center text-sm font-black"
-            style={{ background: 'linear-gradient(135deg, #7c3aed, #2563eb)' }}>
-            R
-          </div>
-          <span className="font-bold text-sm group-hover:text-violet-300 transition-colors">ResumeAI</span>
-        </Link>
-        <div className="flex items-center gap-4">
-          <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl"
-            style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)' }}>
-            <div className="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold"
-              style={{ background: 'linear-gradient(135deg, #7c3aed, #2563eb)' }}>
-              {session.user.name?.charAt(0).toUpperCase()}
-            </div>
-            <span className="text-sm" style={{ color: 'rgba(255,255,255,0.6)' }}>
-              {session.user.name}
-            </span>
-          </div>
-          <LogoutButton />
-        </div>
-      </nav> */}
 
       <main className="relative z-10 max-w-5xl mx-auto px-6 py-12 pt-24">
         {/* Header */}
         <div className="flex items-center justify-between mb-10">
           <div>
             <h1 className="text-3xl font-black mb-1">
-              স্বাগতম, {session.user.name?.split(' ')[0]} 👋
+              Welcome {session.user.name?.split(' ')[0]} 👋
             </h1>
             <p className="text-sm" style={{ color: 'rgba(255,255,255,0.4)' }}>
               তোমার সব resume এক জায়গায়
