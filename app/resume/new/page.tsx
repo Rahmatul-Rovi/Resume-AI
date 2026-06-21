@@ -75,12 +75,12 @@ export default function NewResumePage() {
   }
 
   const stepLabels = {
-    idle: null,
-    extracting: 'PDF থেকে text বের করা হচ্ছে...',
-    saving: 'Resume save হচ্ছে...',
-    analyzing: 'Gemini AI analyze করছে...',
-    done: '✅ সম্পন্ন! redirect হচ্ছে...',
-  }
+  idle: null,
+  extracting: 'Extracting text from PDF...',
+  saving: 'Saving resume...',
+  analyzing: 'Analyzing with Google AI...',
+  done: '✅ Done! Redirecting...',
+}
 
   const isLoading = step !== 'idle' && step !== 'done'
 
