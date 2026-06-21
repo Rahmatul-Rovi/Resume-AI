@@ -18,8 +18,8 @@ export default function NewResumePage() {
       setError('শুধু PDF file upload করো!')
       return
     }
-    if (f.size > 4 * 1024 * 1024) {
-      setError('File 4MB এর বেশি হওয়া যাবে না')
+    if (f.size > 6 * 1024 * 1024) {
+      setError('File 6MB এর বেশি হওয়া যাবে না')
       return
     }
     setError('')
@@ -118,7 +118,7 @@ export default function NewResumePage() {
           </div>
           <h1 className="text-3xl font-black mb-2">Resume Upload করো</h1>
           <p className="text-sm" style={{ color: 'rgba(255,255,255,0.4)' }}>
-            PDF upload করো, Gemini AI analyze করবে
+            PDF upload করো, Google AI analyze করবে
           </p>
         </div>
 
@@ -143,7 +143,7 @@ export default function NewResumePage() {
           {/* Drop zone */}
           <div>
             <label className="block text-xs font-medium mb-2" style={{ color: 'rgba(255,255,255,0.5)' }}>
-              PDF File <span style={{ color: 'rgba(255,255,255,0.2)' }}>(সর্বোচ্চ 4MB)</span>
+              PDF File <span style={{ color: 'rgba(255,255,255,0.2)' }}>(সর্বোচ্চ 6MB)</span>
             </label>
             <div
               onDragOver={(e) => { e.preventDefault(); setDragging(true) }}
@@ -178,7 +178,7 @@ export default function NewResumePage() {
                   <p className="text-sm font-semibold mb-1" style={{ color: 'rgba(255,255,255,0.6)' }}>
                     PDF drag করো অথবা click করো
                   </p>
-                  <p className="text-xs" style={{ color: 'rgba(255,255,255,0.3)' }}>সর্বোচ্চ 4MB</p>
+                  <p className="text-xs" style={{ color: 'rgba(255,255,255,0.3)' }}>সর্বোচ্চ 6MB</p>
                 </div>
               )}
             </div>
