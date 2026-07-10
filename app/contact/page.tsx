@@ -99,7 +99,7 @@ export default function ContactPage() {
                       <label className="block text-xs font-medium mb-2" style={{ color: 'rgba(255,255,255,0.5)' }}>Email</label>
                       <input type="email" required value={form.email}
                         onChange={(e) => setForm({ ...form, email: e.target.value })}
-                        placeholder="you@example.com"
+                        placeholder="Enter Your Email"
                         className="w-full rounded-xl px-4 py-3 text-sm text-white focus:outline-none transition-all"
                         style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)' }}
                         onFocus={e => (e.currentTarget.style.borderColor = 'rgba(124,58,237,0.5)')}
